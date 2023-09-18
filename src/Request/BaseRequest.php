@@ -32,7 +32,7 @@ abstract class BaseRequest
         }
     }
 
-    public function validate(): void
+    public function validate(): ?array
     {
         $errors = $this->validator->validate($this);
         $messages = ['message' => 'validation_failed', 'errors' => []];
@@ -45,12 +45,10 @@ abstract class BaseRequest
                 'message' => $message->getMessage(),
             ];
         }
-
         if (count($messages['errors']) > 0) {
-            $response = new JsonResponse($messages);
-            $response->send();
-            exit;
+            return $messages;
         }
+        return null;
     }
 
     protected function autoValidateRequest(): bool
