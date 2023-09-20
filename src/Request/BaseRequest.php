@@ -2,6 +2,7 @@
 
 namespace App\Request;
 
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Validator\ConstraintViolation;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
@@ -31,7 +32,7 @@ abstract class BaseRequest
         }
     }
 
-    public function validate(): ?array
+    public function validate(): void
     {
         $errors = $this->validator->validate($this);
         $messages = ['message' => 'validation_failed', 'errors' => []];
@@ -45,9 +46,9 @@ abstract class BaseRequest
             ];
         }
         if (count($messages['errors']) > 0) {
-            return $messages;
+            (new JsonResponse($messages))->send();
+            exit;
         }
-        return null;
     }
 
     protected function autoValidateRequest(): bool

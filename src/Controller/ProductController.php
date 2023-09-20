@@ -13,7 +13,7 @@ class ProductController extends AbstractController
     #[Route('/calculate-price', methods: ['POST'])]
     public function calculatePrice(ProductService $productService, CalculateProductPriceRequest $request): JsonResponse
     {
-        $request->validate();
+        //if ($request->validate()) {};
         return $this->json([
             'message' => 'Welcome to your new controller!',
             'path' => 'src/Controller/ProductController.php',
