@@ -12,7 +12,7 @@ class ProductService
         return 'service';
     }
 
-    public function calculatePrice()
+    public function calculatePrice(): float
     {
         return;
     }
