@@ -46,7 +46,7 @@ abstract class BaseRequest
             ];
         }
         if (count($messages['errors']) > 0) {
-            (new JsonResponse($messages))->send();
+            (new JsonResponse($messages, 400))->send();
             exit;
         }
     }
