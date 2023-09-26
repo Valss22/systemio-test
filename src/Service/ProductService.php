@@ -2,7 +2,9 @@
 
 namespace App\Service;
 
+use App\Enum\PaymentProcessor;
 use App\Enum\Product;
+use App\PaypalPaymentProcessor;
 use App\StripePaymentProcessor;
 
 class ProductService
@@ -14,12 +16,24 @@ class ProductService
         'FR' => 0.24,
     ];
 
-    public function processPayment(array $data)
+    public function processPayment(array $data): bool
     {
-        return 'service';
+        switch ($data['paymentProcessor']) {
+            case PaymentProcessor::Paypal->value:
+                try {
+                    PaypalPaymentProcessor::pay($this->calculatePrice($data) / 100);
+                    return true;
+                } catch (\Exception $e) {
+                    return false;
+                }
+            case PaymentProcessor::Stripe->value:
+                return StripePaymentProcessor::processPayment($this->calculatePrice($data));
+            default:
+                return false;
+        }
     }
 
-    public function calculatePrice(array $data): float
+    public function calculatePrice(array $data): float|int
     {
         $productPrice = Product::from($data['product'])->price();
         $tax = self::COUNTRY_TAX[substr($data['taxNumber'], 0, 2)];

@@ -22,7 +22,7 @@ class CalculateProductPriceRequest extends BaseRequest
 
     public function validate(): void
     {
-        $taxNumberRegex = "/^(DE|IT|GR|FR[A-Z]{2})[0-9]{9}$/";
+        $taxNumberRegex = "/^(DE|IT|GR|FR[A-Z]{2})[0-9]*$/";
         $couponCodeRegex = "/^D([0-9]|[1-9][0-9]|100)$/";
 
         $messages = ['message' => 'validation_failed', 'errors' => []];
